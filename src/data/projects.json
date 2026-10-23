@@ -39,5 +39,30 @@
     "desc": "양자화 방식별 처리량·지연·메모리 측정 + LLM-as-judge 품질 평가.",
     "stack": ["vLLM", "SGLang", "AWQ/FP8"],
     "upcoming": true
+  },
+  {
+    "id": "hri",
+    "no": "06",
+    "tag": "컴퓨터의학 졸업프로젝트",
+    "name": "HRI — 지역 의료 복원 지수",
+    "desc": "전국 229개 시·군·구의 의료 인력·인프라·수요 압력을 결합한 지수와 자원 변경 시나리오 분석.",
+    "stack": [
+      "Public health data",
+      "PCA · LASSO",
+      "Clustering"
+    ],
+    "link": "https://github.com/vashazza/HRI-korea"
+  },
+  {
+    "id": "smart-mallang",
+    "no": "07",
+    "tag": "휴먼기계바이오공학부 졸업프로젝트",
+    "name": "스마트 말랑이",
+    "desc": "5채널 압력 센서·에어백 경도 조절·BLE 앱 피드백을 결합한 가정용 손 운동·재활 보조 시제품.",
+    "stack": [
+      "Pressure sensing",
+      "BLE",
+      "Prototyping"
+    ]
   }
 ]

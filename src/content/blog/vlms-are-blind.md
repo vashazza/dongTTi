@@ -1,6 +1,6 @@
 ---
-title: "Vision language models are blind: Failing to translate detailed visual features into words"
-subtitle: "VLM의 취약점"
+title: Vision language models are blind
+subtitle: VLM의 취약점
 date: 2025-11-14
 category: paper
 readMinutes: 12

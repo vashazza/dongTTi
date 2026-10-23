@@ -1,6 +1,6 @@
 # dongTTi.zip ★
 
-Y2K 메신저 감성의 포트폴리오 겸 기술 블로그. Astro + React islands, GitHub Pages 배포.
+포트폴리오 겸 기술 블로그. Astro + React islands, GitHub Pages 배포.
 
 🔗 https://vashazza.github.io/dongTTi/
 
@@ -66,12 +66,6 @@ readMinutes: 5
 - 파일 이름이 주소가 돼요: `my-post.md` → `/blog/my-post`
 - 빈 줄 없이 엔터 한 번도 줄바꿈으로 보여요 (`remark-breaks`)
 - 초안은 이 레포가 공개라서 `.gitignore`에 올려 로컬에만 두고, 공개할 때 빼서 커밋해요
-
-## 배포 (GitHub Pages)
-
-`main`에 push하면 `.github/workflows/deploy.yml`이 빌드해서 자동 배포해요 (Node 24).
-레포 이름이 `<username>.github.io`가 아니라서 `astro.config.mjs`에 `base: '/dongTTi'`가 들어가 있어요.
-내부 링크는 `lib/site.ts`의 `url()`로 감싸야 base 경로가 붙어요.
 
 ## TODO
 

@@ -8,3 +8,7 @@ dist/
 # 초안 글 (공개 전까지 로컬에만 보관)
 src/content/blog/essa-behind-the-scenes.md
 src/content/blog/serving-vlm-24gb.md
+
+# Obsidian vault (src/content/blog 을 vault로 열 때 생기는 설정·휴지통)
+.obsidian/
+.trash/

@@ -4,7 +4,7 @@ import { z } from 'astro/zod';
 
 // Blog posts: write .md/.mdx in src/content/blog (Obsidian notes drop in here)
 const blog = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
+  loader: glob({ pattern: ['**/*.{md,mdx}', '!**/_*/**'], base: './src/content/blog' }),
   schema: z.object({
     title: z.string(),
     subtitle: z.string().optional(),

@@ -1,6 +1,6 @@
 ---
-title: "Deliberative Alignment: Reasoning Enables Safer Language Models"
-subtitle: "openAi - LLM이 안전 사양을 명시적으로 학습하고, 답변하기 전에 해당 사양에 대해 추론하도록 훈련 하는 새로운 패러다임 Deliberative Alignment 제안"
+title: Deliberative Alignment
+subtitle: openAi - LLM이 안전 사양을 명시적으로 학습하고, 답변하기 전에 해당 사양에 대해 추론하도록 훈련 하는 새로운 패러다임 Deliberative Alignment 제안
 date: 2025-11-13
 category: paper
 readMinutes: 12

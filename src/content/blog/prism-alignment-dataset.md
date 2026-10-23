@@ -1,6 +1,6 @@
 ---
-title: "The PRISM Alignment Dataset: What Participatory, Representative and Individualised Human Feedback Reveals About the Subjective and Multicultural Alignment of Large Language Models"
-subtitle: "alignment의 ground truth로 작용하는 human feedback 그 자체에 대한 고찰"
+title: The PRISM Alignment Dataset
+subtitle: alignment의 ground truth로 작용하는 human feedback 그 자체에 대한 고찰
 date: 2025-11-13
 category: paper
 readMinutes: 12

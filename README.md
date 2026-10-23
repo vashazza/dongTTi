@@ -1,76 +1,64 @@
 # dongTTi.zip ★
 
-포트폴리오 겸 기술 블로그. Astro + React islands, GitHub Pages 배포.
+개인 포트폴리오 겸 기술 블로그.
+의료 AI · LLM 서빙 연구 기록과 논문 리뷰, 프로젝트 노트를 모아 둔다.
 
-🔗 https://vashazza.github.io/dongTTi/
+🔗 <https://vashazza.github.io/dongTTi/>
 
-## 시작하기
+## Stack
+
+- **Astro 7** — 정적 사이트 생성, Content Collections로 글·데이터 스키마 검증
+- **React islands** — 상태바, 메신저 로그인, 카테고리 필터, about 탭 등 인터랙션이 필요한 부분만 hydrate
+- **View Transitions** — 페이지 전환 시 상단 상태바 유지 (`transition:persist`)
+- **Markdown / MDX** — `remark-breaks` · `remark-cjk-friendly`로 한국어 글 렌더링 보정
+- **giscus** — GitHub Discussions 기반 댓글
+- **GitHub Actions → GitHub Pages** 자동 배포
+
+## Features
+
+- 카테고리별 블로그 (Paper reviews · Study notes · Project notes)와 클라이언트 필터
+- 프로젝트별 글 시리즈 페이지 (`/projects/[id]`) — 글 frontmatter의 `project` 참조로 자동 연결
+- about 페이지: 논문 · 프로젝트 · 수상 · 기술 스택 탭
+- RSS, sitemap, draft 글은 배포 빌드에서 제외
+- 셀프 호스팅 웹폰트, `prefers-reduced-motion` 대응
+
+## Structure
+
+```text
+src/
+├─ content/blog/       블로그 글 (.md / .mdx)
+├─ data/               papers · projects · awards (JSON)
+├─ content.config.ts   글·데이터 스키마
+├─ layouts/            공통 레이아웃 (상태바 · 페이지 전환 · 푸터)
+├─ components/         XP 창 프레임, 글 배너, 댓글 등
+│  └─ islands/         React 컴포넌트
+├─ lib/                전역 설정, 글 정렬·그룹핑, 고유명사 스타일링
+├─ pages/              index · about · blog · projects · rss · 404
+├─ styles/             디자인 토큰, Y2K 컴포넌트 스타일
+└─ assets/fonts/       woff2 웹폰트
+```
+
+## Development
 
 ```bash
 npm install
-npm run dev      # http://localhost:4321
-npm run build    # dist/ 에 정적 사이트 생성
+npm run dev      # http://localhost:4321/dongTTi/
+npm run build    # dist/
 ```
 
-개발 모드(`npm run dev`)에서는 `draft: true` 글도 보이고, 배포 빌드에서는 빠져요.
+Node 22.12 이상 필요.
 
-## 구조
+## Writing a post
 
-```
-src/
-├─ content/blog/        ← 블로그 글 (.md / .mdx). 옵시디언 노트를 여기로
-├─ data/                ← papers.json · projects.json · awards.json
-├─ assets/fonts/        ← 셀프 호스팅 웹폰트 (woff2)
-├─ content.config.ts    ← 글/데이터 스키마 (frontmatter 검사)
-├─ layouts/BaseLayout.astro   ← 공통 틀: 상단 상태바 + 페이지 전환 + 하단 바
-├─ components/
-│  ├─ XpWindow.astro    ← 레트로 OS 창 프레임
-│  ├─ Stars.astro       ← 반짝이는 별 장식
-│  ├─ Marquee.astro     ← 흐르는 전광판
-│  ├─ PostBanner.astro  ← 글 목록 배너
-│  ├─ Comments.astro    ← giscus 댓글
-│  ├─ Pn.astro          ← 고유명사(dongTTi 등)를 스크립트 로고처럼 꾸밈 · 목록은 lib/pn.ts
-│  └─ islands/          ← 움직이는 부분만 React (필요한 곳에서만 JS 로드)
-│     ├─ StatusBar.tsx       페이지 넘겨도 유지 (transition:persist)
-│     ├─ MessengerLogin.tsx  닉네임 → 상태바 연동
-│     ├─ CategoryFilter.tsx  글 카테고리 필터
-│     └─ AboutTabs.tsx       about 탭 + 프로젝트 옷장
-├─ lib/
-│  ├─ site.ts           ← 이름, 이메일, 깃헙, 카테고리 이름 등 전역 설정
-│  ├─ posts.ts          ← 글 목록(최신순) · 프로젝트별 글 묶기
-│  └─ pn.ts             ← 꾸밀 고유명사 목록
-├─ pages/               ← index · about · blog/ · blog/[slug] · projects/[id] · rss.xml · 404
-└─ styles/
-   ├─ global.css        ← 색/폰트 토큰 + 광택 버튼 등 Y2K 공통 스타일
-   └─ glitter.css       ← 핑크 테마 배경 반짝이
-```
-
-## 글 쓰기
-
-`src/content/blog/my-post.md`:
+`src/content/blog/<slug>.md`
 
 ```md
 ---
 title: 글 제목
-subtitle: 부제 (선택)
+subtitle: 부제            # optional
 date: 2026-10-07
-category: study   # paper(Paper reviews) | study(Study notes) | project(Project notes)
-project: essa     # 선택 · projects.json의 id → /projects/<id> 페이지에 시리즈로 모임
+category: study           # paper | study | project
+project: essa             # optional, data/projects.json id
 draft: false
-readMinutes: 5
 ---
-
-본문...
 ```
-
-- 파일 이름이 주소가 돼요: `my-post.md` → `/blog/my-post`
-- 빈 줄 없이 엔터 한 번도 줄바꿈으로 보여요 (`remark-breaks`)
-- 초안은 이 레포가 공개라서 `.gitignore`에 올려 로컬에만 두고, 공개할 때 빼서 커밋해요
-
-## TODO
-
-- [ ] 프로필·폴라로이드 사진 넣기 (`about.astro`, `index.astro`, `MessengerLogin`의 `photo` prop)
-- [ ] giscus `repoId`·`categoryId` 채우기 (`src/components/Comments.astro`)
-- [ ] 수상 연도 채우기 (`src/data/awards.json`의 devocean, ctech)
-- [ ] `about.astro`의 기술 스택을 실제로 써 본 것만으로 정리
-- [ ] 방문자 카운터 서비스 연결

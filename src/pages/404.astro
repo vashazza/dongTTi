@@ -1,0 +1,25 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import XpWindow from '@/components/XpWindow.astro';
+import { url } from '@/lib/site';
+---
+
+<BaseLayout title="404" footerLine="this page went offline, better luck next time">
+  <div class="wrap">
+    <XpWindow title="error.exe">
+      <div class="box">
+        <p class="f-display big">404 — page not found</p>
+        <p class="f-hand">앗, 여긴 아무것도 없어요 (｡•́︿•̀｡)</p>
+        <a href={url('/')} class="btn-aqua f-display">take me home</a>
+      </div>
+    </XpWindow>
+  </div>
+</BaseLayout>
+
+<style>
+  .wrap { max-width: 520px; margin: 0 auto; padding: 80px 16px; }
+  .box { background: #FFFFFF; padding: 28px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+  .box p { margin: 0; font-size: 20px; }
+  .big { font-size: 26px !important; text-transform: uppercase; }
+  .box a { padding: 6px 22px; font-weight: 800; }
+</style>

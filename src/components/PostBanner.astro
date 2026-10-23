@@ -1,0 +1,59 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { CATEGORY_LABEL, formatDate, url } from '@/lib/site';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+const { post } = Astro.props;
+const { title, subtitle, date, category, draft } = post.data;
+
+const THEME: Record<string, { bg: string; chip: string }> = {
+  paper: { bg: 'linear-gradient(90deg,#3A0CA3,#8A4FFF)', chip: '#1B0033' },
+  study: { bg: 'linear-gradient(90deg,#1FA84F,#7ED321)', chip: '#0B4D22' },
+  project: { bg: 'linear-gradient(90deg,#FF2FB4,#FF7AD9)', chip: '#9A0F5E' },
+};
+const t = THEME[category];
+---
+
+<a href={url(`/blog/${post.id}`)} class="banner" style={`background:${t.bg}`} data-category={category}>
+  <div class="chip" style={`background:${t.chip}`}>
+    <span class="f-accent cat">{CATEGORY_LABEL[category]}</span>
+    <span class="f-accent date">{draft ? 'SOON' : formatDate(date)}</span>
+  </div>
+  <div class="text">
+    <span class="f-display title">{title}</span>
+    {subtitle && <span class="f-ui sub">{subtitle}</span>}
+  </div>
+  <span class="overlay f-script" aria-hidden="true">Wanna read this? ▶</span>
+</a>
+
+<style>
+  .banner {
+    position: relative; display: flex; align-items: stretch; text-decoration: none; color: inherit;
+    border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--navy); transition: transform .15s ease;
+  }
+  .banner:hover { transform: scale(1.02); }
+  .chip {
+    flex: 0 0 130px; border-right: 3px solid var(--ink); padding: 10px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+  }
+  .cat { font-size: 14px; letter-spacing: 0; color: #FFFFFF; }
+  .date { font-size: 14px; letter-spacing: 0; color: var(--yellow); }
+  .text { flex: 1 1 auto; min-width: 0; padding: 14px 18px; display: flex; flex-direction: column; gap: 4px; }
+  .title { font-size: 22px; color: #FFFFFF; text-shadow: 2px 2px 0 var(--ink); line-height: 1.2; }
+  .sub { font-size: 15px; color: #FFFFFF; }
+  .overlay {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: rgba(27,0,51,.55); color: #FFFFFF; font-size: 32px;
+    text-shadow: 2px 2px 0 var(--hot-deep); opacity: 0; transition: opacity .15s ease; pointer-events: none;
+  }
+  .banner:hover .overlay, .banner:focus-visible .overlay { opacity: 1; }
+  @media (max-width: 560px) {
+    .chip { flex-basis: 88px; padding: 8px 6px; }
+    .cat, .date { font-size: 14px; }
+    .text { padding: 10px 12px; }
+    .title { font-size: 18px; }
+    .overlay { font-size: 20px; }
+  }
+</style>

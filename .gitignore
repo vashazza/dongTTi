@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+.DS_Store
+
+# 초안 글 (공개 전까지 로컬에만 보관)
+src/content/blog/essa-behind-the-scenes.md
+src/content/blog/serving-vlm-24gb.md

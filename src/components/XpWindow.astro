@@ -1,0 +1,51 @@
+---
+// 레트로 OS 창 프레임. 메뉴 항목은 장식이에요.
+interface Props {
+  title: string;
+  menu?: string[];
+  class?: string;
+}
+const { title, menu = ['File', 'View', 'Help'], class: className } = Astro.props;
+---
+
+<section class:list={['xpwin', className]}>
+  <header class="xpbar">
+    <span class="title">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="9" cy="9" r="5" fill="#7CFF6B" stroke="#FFFFFF" stroke-width="1.5"></circle>
+        <circle cx="16" cy="14" r="5" fill="#FF7AD9" stroke="#FFFFFF" stroke-width="1.5"></circle>
+      </svg>
+      {title}
+    </span>
+    <span class="ctrls" aria-hidden="true">
+      <span>_</span><span>□</span><span class="close">×</span>
+    </span>
+  </header>
+  <nav class="menu" aria-hidden="true">
+    {menu.map((m) => <span><u>{m[0]}</u>{m.slice(1)}</span>)}
+  </nav>
+  <div class="body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .xpwin {
+    border: 2px solid #0A246A; border-radius: 10px 10px 4px 4px; overflow: hidden;
+    background: #ECE9D8; box-shadow: 6px 6px 0 rgba(58, 12, 163, .55);
+  }
+  .xpbar {
+    display: flex; justify-content: space-between; align-items: center; padding: 6px 8px 6px 12px;
+    color: #FFFFFF; font-family: var(--font-display); font-weight: 700; font-size: 15px;
+    background: linear-gradient(180deg, #3A8DFF 0%, #0A5FE0 45%, #0045C7 55%, #2C7BFF 100%);
+  }
+  .title { display: flex; align-items: center; gap: 8px; }
+  .ctrls { display: flex; gap: 3px; }
+  .ctrls span {
+    width: 22px; height: 22px; border: 1.5px solid #FFFFFF; border-radius: 4px; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, #5FA0FF, #1E5BD6);
+  }
+  .ctrls .close { background: linear-gradient(180deg, #FF8A6B, #D9361A); }
+  .menu { display: flex; gap: 16px; padding: 4px 12px; font-size: 13px; border-bottom: 1px solid #ACA899; }
+</style>

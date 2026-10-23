@@ -1,0 +1,169 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import XpWindow from '@/components/XpWindow.astro';
+import Stars from '@/components/Stars.astro';
+import Marquee from '@/components/Marquee.astro';
+import PostBanner from '@/components/PostBanner.astro';
+import Pn from '@/components/Pn.astro';
+import MessengerLogin from '@/components/islands/MessengerLogin';
+import { getPosts } from '@/lib/posts';
+import { SITE, url } from '@/lib/site';
+
+const posts = (await getPosts()).slice(0, 3);
+
+const stars = [
+  { x: '4%', y: '60px', size: 64, colors: ['#7DF9FF', '#3A0CA3'] as [string, string], delay: 0.2 },
+  // 별이 커지면서 말풍선 뒤로 삐져나와서 폴라로이드 위 빈자리로 옮겼어요
+  { x: 'r16%', y: '30px', size: 48, colors: ['#FF5A5A', '#B0001E'] as [string, string], delay: 0.9 },
+  { x: 'r6%', y: '340px', size: 56, colors: ['#FFF27A', '#FF9E1F'] as [string, string], delay: 1.4 },
+  { x: '8%', y: '520px', size: 52, colors: ['#C6FF5A', '#1FA84F'] as [string, string], delay: 0.5 },
+  { x: 'r24%', y: '610px', size: 40, delay: 1.9 },
+  { x: 'r3%', y: '40px', size: 36, delay: 0.7 },
+];
+---
+
+<BaseLayout>
+  <!-- HERO -->
+  <section class="hero">
+    <Stars stars={stars} />
+    <div class="hero-inner">
+      <div class="left">
+        <button type="button" class="who" popovertarget="about-pop">
+          Who the heck is <Pn>dongTTi</Pn><span class="q">?!</span>
+          <svg class="cursor" viewBox="0 0 18 20" aria-hidden="true"><path d="M2 1 L2 16 L6 12.5 L9 19 L12 17.6 L9.2 11.3 L14.5 11 Z" fill="#FFFFFF" stroke="#1B0033" stroke-width="1.6" stroke-linejoin="round"></path></svg>
+          <span class="click" aria-hidden="true">
+            <svg viewBox="0 0 100 100"><polygon points="50,2 58,20 76,8 74,28 95,26 84,43 100,54 81,62 90,81 70,78 66,98 53,84 40,99 35,79 14,86 21,66 2,58 18,46 6,28 27,28 24,8 42,19" fill="#FFE600" stroke="#1B0033" stroke-width="4" stroke-linejoin="round"></polygon></svg>
+            <span>CLICK!</span>
+          </span>
+        </button>
+        <div id="about-pop" class="about-box" popover>
+          <div class="f-display head">
+            About me
+            <button type="button" class="close" popovertarget="about-pop" popovertargetaction="hide" aria-label="닫기">×</button>
+          </div>
+          <div class="f-read">박동초 · 이화여대 생명의공학/계산의학<br />KAIST DAVIAN Lab 연구인턴<br />의료 AI × LLM 서빙</div>
+          <div class="f-hand pinkline">작은 GPU로도 잘 돌아가게!</div>
+        </div>
+        <XpWindow title="dongTTi messenger">
+          <MessengerLogin client:load />
+        </XpWindow>
+        <nav class="main-nav" aria-label="main">
+          <a href={url('/about')} class="btn-pill">&gt; about me</a>
+          <a href={url('/blog')} class="btn-pill">&gt; blog</a>
+        </nav>
+      </div>
+
+      <div class="right">
+        <figure class="polaroid">
+          <div class="photo">
+            <span class="f-hand">[ 셀카 or 작업 사진 ]</span>
+            <span class="wordart tag">#NEW</span>
+          </div>
+          <figcaption class="f-script">dongTTi ({SITE.handle})</figcaption>
+        </figure>
+
+        <div class="convo">
+          <div class="convo-bar f-display">recent convo</div>
+          <div class="convo-body f-read">
+            <div><b class="me">dongTTi:</b> ICLR 2027 투고 끝냄 lol</div>
+            <div><b class="you">you:</b> what r u working on now??</div>
+            <div><b class="me">dongTTi:</b> 24GB GPU 한 장으로 의료 VLM 서빙 실험 중 :^)</div>
+            <div><b class="you">you:</b> omg post it on the blog</div>
+          </div>
+        </div>
+
+        <div class="sticker bob f-script-bold">NEW<br />POST<br />every<br />month!</div>
+      </div>
+    </div>
+  </section>
+
+  <Marquee items={['★ WELCOME TO DONGTTI.ZIP ★', 'LLM SERVING', 'MEDICAL AI', 'AI SAFETY', 'leave a comment plz']} />
+
+  <!-- WHAT'S NEW -->
+  <section class="news">
+    <div class="news-inner">
+      <div class="feed">
+        <h2 class="headline"><span class="wordart"><Pn text="WHAT'S NEW AT dongTTi.zip" /></span></h2>
+        <div id="post-list" class="list">
+          {posts.map((p) => <PostBanner post={p} />)}
+        </div>
+        <div class="cta-row">
+          <a href={url('/about')} class="btn-pill f-display">CHECK MY PAPERS!!</a>
+          <span class="f-display or">OR</span>
+          <a href={url('/blog')} class="btn-aqua f-display">ALL POSTS!!</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero { position: relative; overflow: hidden; padding: 40px 16px 56px; }
+  .hero-inner { position: relative; max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 28px; justify-content: center; align-items: flex-start; }
+  .left { flex: 1 1 420px; max-width: 520px; display: flex; flex-direction: column; gap: 18px; }
+  /* 말풍선 버튼 — Sign in(아쿠아 알약)과 구분, 누를 수 있다는 신호(커서·CLICK! 스티커·주기적 흔들림·눌림) */
+  .who {
+    position: relative; align-self: center; cursor: pointer; min-height: 44px;
+    padding: 10px 26px 12px; border: 2.5px solid var(--ink); border-radius: 22px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 45%, #FFE3F1 55%, #FFC9E6 100%);
+    box-shadow: inset 0 3px 0 #FFFFFF, inset 0 -4px 8px rgba(255, 47, 180, .18), 5px 5px 0 var(--violet);
+    font: 400 17px var(--font-display); letter-spacing: .02em; text-transform: uppercase; color: var(--cobalt);
+    rotate: -2deg; transition: transform .15s ease, box-shadow .1s ease;
+    animation: who-nudge 4s ease-in-out infinite;
+  }
+  .who::before, .who::after { content: ""; position: absolute; clip-path: polygon(0 0, 100% 0, 22% 100%); }
+  .who::before { left: 56%; bottom: -18px; width: 30px; height: 18px; background: var(--ink); }
+  .who::after { left: calc(56% + 3.5px); bottom: -12px; width: 22px; height: 14.5px; background: #FFC9E6; }
+  .who:hover { animation: none; transform: scale(1.05) rotate(2deg); }
+  .who:active { transform: translate(4px, 4px); box-shadow: inset 0 3px 0 #FFFFFF, 1px 1px 0 var(--violet); }
+  .who:focus-visible { outline: 3px solid var(--yellow); outline-offset: 4px; }
+  .who .q { color: var(--violet); }
+  /* 흰 말풍선 안이라 고유명사는 흰 외곽선 없이 핫핑크로 */
+  .who :global(.pn) { --pn-fill: var(--shock); --pn-stroke: 0; filter: none; font-size: 1.6em; }
+  .who .cursor { display: inline-block; width: 18px; height: 20px; margin-left: 8px; vertical-align: -3px; animation: who-tap 1.2s ease-in-out infinite; }
+  .who .click {
+    position: absolute; top: -22px; right: -36px; width: 62px; height: 62px; rotate: 14deg; pointer-events: none;
+    display: flex; align-items: center; justify-content: center;
+    font: 400 11px/1 var(--font-display); text-transform: uppercase; color: var(--ink);
+  }
+  .who .click svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: who-spin 8s linear infinite; }
+  .who .click span { position: relative; }
+  @keyframes who-nudge { 0%, 82%, 100% { transform: none; } 86% { transform: rotate(3deg) scale(1.03); } 90% { transform: rotate(-3deg) scale(1.03); } 94% { transform: rotate(2deg); } }
+  @keyframes who-tap { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-2px, -3px); } }
+  @keyframes who-spin { to { transform: rotate(360deg); } }
+  .main-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .main-nav a { font-size: 20px; letter-spacing: .02em; min-height: 52px; }
+  .main-nav a:hover { color: #3A2400; text-decoration: underline; text-underline-offset: 4px; border-color: #7A4B00;
+    background: linear-gradient(180deg, #FFF7C2 0%, #FFD43B 48%, #F5A800 52%, #FFE066 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,.9), 0 3px 0 #7A4B00; }
+
+  .right { flex: 1 1 300px; max-width: 380px; display: flex; flex-direction: column; gap: 18px; padding-top: 52px; }
+  .polaroid { margin: 0; background: #FFFFFF; border: 3px solid var(--ink); padding: 10px 10px 8px; transform: rotate(2deg); box-shadow: 6px 6px 0 var(--violet); }
+  .photo { aspect-ratio: 4 / 3; background: linear-gradient(160deg, var(--violet), var(--hot)); position: relative; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 20px; overflow: hidden; }
+  .photo .tag { position: absolute; right: 8px; bottom: 0; font-size: 46px; --wa-fill: var(--yellow); }
+  figcaption { text-align: center; font-size: 17px; color: #C2007A; padding-top: 8px; }
+
+  .convo { border: 2px solid #6C8FD8; border-radius: 10px; background: #FFFFFF; overflow: hidden; box-shadow: 4px 4px 0 rgba(58,12,163,.5); }
+  .convo-bar { background: linear-gradient(180deg,#F4F8FF,#D3E2FF); padding: 6px 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .02em; color: #0A246A; border-bottom: 1px solid #6C8FD8; }
+  .convo-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; line-height: 1.45; }
+  .me { color: #C2007A; } .you { color: #0045C7; }
+
+  .sticker { align-self: flex-end; width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center;
+    background: linear-gradient(180deg,#C6FF5A,#7ED321); border: 3px solid var(--ink); box-shadow: 4px 4px 0 var(--ink);
+    color: var(--ink); font-size: 22px; line-height: 1; rotate: -10deg; }
+
+  .news { background: linear-gradient(180deg,#6FA8FF 0%,#9BC4FF 40%,#CFE3FF 100%); padding: 40px 16px 48px; }
+  .news-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 24px; }
+  .about-box { background: var(--navy); border: 3px solid var(--yellow); border-radius: 6px; padding: 14px; color: #FFFFFF; flex-direction: column; gap: 8px; font-size: 14px; line-height: 1.6;
+    width: min(340px, calc(100vw - 32px)); box-shadow: 6px 6px 0 var(--violet); }
+  .about-box:popover-open { display: flex; }
+  .about-box::backdrop { background: rgba(27,0,51,.35); }
+  .about-box .head { font-size: 15px; color: var(--yellow); text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
+  .about-box .close { background: none; border: 0; color: var(--yellow); font-size: 22px; line-height: 1; padding: 0 4px; }
+  .pinkline { font-size: 18px; color: #FF9CCB; }
+  .feed { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+  .headline { --wa-fill: var(--yellow); margin: 0; background: linear-gradient(90deg, var(--navy), var(--violet), var(--navy)); border: 3px solid var(--yellow); border-radius: 6px; padding: 10px 16px; text-align: center; font-size: clamp(24px, 4vw, 40px); }
+  .list { display: flex; flex-direction: column; gap: 18px; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: center; }
+  .cta-row a { padding: 10px 22px; font-size: 16px; }
+  .or { color: var(--navy); }
+</style>

@@ -1,0 +1,165 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AboutTabs from '@/components/islands/AboutTabs';
+import Pn from '@/components/Pn.astro';
+import { SITE, url } from '@/lib/site';
+import { getPostsByProject } from '@/lib/posts';
+
+const papers = (await getCollection('papers')).map((p) => p.data).sort((a, b) => a.order - b.order)
+  .map((p, i) => ({ ...p, id: String(i) }));
+const projects = (await getCollection('projects')).map((p) => ({ ...p.data, id: p.id })).sort((a, b) => a.no.localeCompare(b.no));
+const awards = (await getCollection('awards')).map((a) => ({ ...a.data, id: a.id }));
+
+// 프로젝트별 관련 글 → '더 보기' 버튼 링크 (글 1개면 그 글로, 여러 개면 프로젝트 페이지로)
+const related = Object.fromEntries(
+  [...(await getPostsByProject())].map(([id, posts]) => [
+    id,
+    { count: posts.length, href: posts.length === 1 ? url(`/blog/${posts[0].id}`) : url(`/projects/${id}`) },
+  ]),
+);
+
+// 실제로 써 본 것만 남기기!
+const stack = [
+  { group: 'ML / research', items: ['[PyTorch]', '[HF Transformers]', '[VLM fine-tuning]', '[LLM-as-a-Judge]'] },
+  { group: 'serving / infra', items: ['[vLLM]', '[Quantization]', '[Docker]', '[Linux · GPU server]'] },
+  { group: 'lang', items: ['[Python]', '[SQL]', '[Bash]'] },
+];
+---
+
+<BaseLayout title="about me" theme="sky" footerLine="thx for stopping by, sign the guestbook on ur way out">
+  <div class="wrap">
+    <div class="chrome">
+      <div class="titlebar f-display">
+        <span class="title">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="9" cy="9" r="5" fill="#7CFF6B" stroke="#FFFFFF" stroke-width="1.5"></circle>
+            <circle cx="16" cy="14" r="5" fill="#FF7AD9" stroke="#FFFFFF" stroke-width="1.5"></circle>
+          </svg>
+          dongTTi explorer — about me
+        </span>
+        <span class="ctrls" aria-hidden="true"><span>_</span><span>□</span><span class="close">×</span></span>
+      </div>
+      <div class="addr" aria-hidden="true">
+        {['File', 'Edit', 'View', 'Favorites', 'Help'].map((m) => <span><u>{m[0]}</u>{m.slice(1)}</span>)}
+      </div>
+    </div>
+
+    <div class="page">
+      <nav class="toplinks">
+        <a href={url('/')}>home</a>
+        <a href={url('/blog')}>blog</a>
+        <button type="button" popovertarget="contact-pop">mail</button>
+        <a href={SITE.github} target="_blank" rel="noopener">github</a>
+      </nav>
+
+      <header class="profile">
+        <div class="frame">
+          <div class="pic"><span class="f-hand">[ 프로필 사진 ]</span></div>
+        </div>
+        <div class="who">
+          <h1 class="f-display name"><Pn text="Dongcho Park" /></h1>
+          <div class="f-display sub"><Pn text="박동초 · a.k.a. dongTTi" /></div>
+          <div class="online">Last time online: <span class="blink">now</span> (probably benchmarking)</div>
+          <div class="inset chat f-read">
+            <div><b class="r">you:</b> so what do u do?</div>
+            <div><b class="d">dongTTi:</b> 의료 AI 연구하고, 그걸 작은 GPU에서 빠르게 돌리는 거 공부해요</div>
+            <div><b class="r">you:</b> major??</div>
+            <div><b class="d">dongTTi:</b> 생명의공학 + 계산의학. CS는 독학 중 :^)</div>
+          </div>
+        </div>
+      </header>
+
+      <AboutTabs client:load papers={papers} projects={projects} awards={awards} stack={stack} related={related} />
+
+      <button type="button" class="cta" popovertarget="contact-pop">
+        <span class="q">want to work with a GPU-poor researcher?</span>
+        <span class="f-script go">Click here!</span>
+      </button>
+
+      <div id="contact-pop" class="contact" popover>
+        <div class="contact-bar f-display">
+          <span>new message — dongTTi</span>
+          <button type="button" class="x" popovertarget="contact-pop" popovertargetaction="hide" aria-label="닫기">×</button>
+        </div>
+        <div class="contact-body">
+          <p class="f-ui">연락 주시면 바로 답장할게요 :^)</p>
+          <div class="inset addr-row">
+            <span class="f-ui email">{SITE.email}</span>
+            <button type="button" class="btn-pill f-display copy" data-copy={SITE.email}>copy</button>
+          </div>
+          <div class="contact-actions">
+            <a href={`mailto:${SITE.email}`} class="btn-aqua f-display">send mail ▶</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // 메일 앱이 없는 환경에서도 주소를 가져갈 수 있게 복사 버튼 제공 (페이지 전환 후에도 동작하도록 document에 위임)
+  document.addEventListener('click', async (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-copy]');
+    if (!btn) return;
+    try {
+      await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+      btn.textContent = 'copied!';
+    } catch {
+      btn.textContent = '복사 실패';
+    }
+    setTimeout(() => (btn.textContent = 'copy'), 1500);
+  });
+</script>
+
+<style>
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 18px 16px 32px; }
+  .chrome { border: 2px solid var(--navy); border-radius: 10px 10px 0 0; overflow: hidden; }
+  /* 홈의 XpWindow와 같은 창 틀 */
+  .titlebar { background: linear-gradient(180deg,#3A8DFF 0%,#0A5FE0 45%,#0045C7 55%,#2C7BFF 100%); color: #FFFFFF; padding: 6px 8px 6px 12px; font-size: 15px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+  .titlebar .title { display: flex; align-items: center; gap: 8px; }
+  .ctrls { display: flex; gap: 3px; }
+  .ctrls span { width: 22px; height: 22px; border: 1.5px solid #FFFFFF; border-radius: 4px; font-size: 13px; display: flex; align-items: center; justify-content: center; background: linear-gradient(180deg, #5FA0FF, #1E5BD6); }
+  .ctrls .close { background: linear-gradient(180deg, #FF8A6B, #D9361A); }
+  .addr { background: #ECE9D8; color: var(--ink); padding: 4px 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; font-size: 13px; border-bottom: 1px solid #ACA899; }
+  .page { background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.25)); border: 2px solid var(--navy); border-top: none; padding: 24px 24px 40px; display: flex; flex-direction: column; gap: 22px; }
+  .toplinks { display: flex; justify-content: flex-end; gap: 18px; }
+  .toplinks a, .toplinks button { color: #FFFFFF; text-decoration: none; text-shadow: 0 1px 2px rgba(0,0,0,.4); background: none; border: 0; padding: 0; font: inherit; }
+  .toplinks a:hover, .toplinks button:hover { text-decoration: underline; }
+  .profile { display: flex; flex-wrap: wrap; gap: 28px; align-items: center; }
+  .frame { padding: 14px; border-radius: 34px; background: linear-gradient(180deg,#D8FF9A 0%,#7ED321 45%,#4CA614 55%,#A6EE5A 100%); border: 3px solid #2E6B0A; box-shadow: inset 0 4px 0 rgba(255,255,255,.7), 6px 6px 0 rgba(10,26,110,.35); }
+  .pic { width: 220px; height: 240px; border-radius: 22px; background: linear-gradient(160deg,#FFFFFF,#E4EEFF); display: flex; align-items: center; justify-content: center; border: 2px solid #2E6B0A; color: #5B5FA8; font-size: 22px; }
+  .who { flex: 1 1 320px; display: flex; flex-direction: column; gap: 10px; }
+  .name { margin: 0; font-size: clamp(38px, 6vw, 56px); color: #1A2FD1; line-height: 1.1; }
+  .name :global(.pn) { --pn-fill: var(--cobalt); --pn-stroke: .1em; font-size: 1em; font-family: var(--font-script-bold); font-weight: 400; }
+  .sub { font-size: 26px; color: #1A2FD1; }
+  .online { font-size: 15px; color: #D4001A; }
+  .chat { padding: 10px 12px; font-size: 14px; line-height: 1.55; max-width: 460px; display: flex; flex-direction: column; gap: 2px; }
+  .r { color: #8A2BE2; } .d { color: #1A2FD1; }
+  .cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; text-decoration: none; width: 100%; font: inherit; cursor: pointer;
+    background: linear-gradient(90deg,#D8FF5A,#A6EE1A); border: 3px solid #4A7A00; padding: 14px 20px; color: var(--ink); }
+  .q { background: var(--yellow); padding: 4px 12px; font-size: 18px; font-family: var(--font-ui); }
+  .go { font-size: 30px; color: #FFFFFF; text-shadow: 2px 2px 0 #4A7A00; }
+  .cta:hover .go { text-decoration: underline; }
+  .go { display: inline-block; animation: beg 1.6s ease-in-out infinite; }
+  .cta:hover .go { animation-duration: .6s; }
+  @keyframes beg {
+    0%, 55%, 100% { transform: scale(1) rotate(0); }
+    62% { transform: scale(1.15) rotate(-6deg); }
+    70% { transform: scale(1.15) rotate(6deg); }
+    78% { transform: scale(1.15) rotate(-4deg); }
+    86% { transform: scale(1.08) rotate(2deg); }
+  }
+
+  .contact { width: min(420px, calc(100vw - 32px)); padding: 0; border: 2px solid var(--navy); border-radius: 10px; overflow: hidden; background: #FFFFFF; box-shadow: 6px 6px 0 var(--violet); }
+  .contact::backdrop { background: rgba(27,0,51,.35); }
+  .contact-bar { background: linear-gradient(180deg,#3A8DFF 0%,#0A5FE0 45%,#0045C7 55%,#2C7BFF 100%); color: #FFFFFF; padding: 6px 8px 6px 12px; font-size: 15px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+  .contact-bar .x { background: none; border: 0; color: #FFFFFF; font-size: 22px; line-height: 1; padding: 0 6px; }
+  .contact-body { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .contact-body p { margin: 0; font-size: 15px; color: var(--navy); }
+  .addr-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 6px 6px 10px; }
+  .email { font-size: 19px; overflow-wrap: anywhere; user-select: all; }
+  .copy { flex: none; padding: 0 14px; min-height: 36px; font-size: 14px; font-weight: 700; }
+  .contact-actions { display: flex; gap: 10px; }
+  .contact-actions a { flex: 1; padding: 0 12px; font-size: 15px; font-weight: 800; }
+</style>

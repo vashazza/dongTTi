@@ -1,0 +1,156 @@
+/* ============ fonts ============
+   전부 src/assets/fonts/ 에 로컬로 들어 있어요(외부 요청 없음).
+   한글 폰트는 KS X 1001 완성형 2,350자 + 영문·기호만 남긴 서브셋이에요.
+   (원본 대비 조선굴림 1.4MB → 약 200KB). 굵기 범위를 넓게 선언해서 가짜 볼드가 생기지 않게 했어요. */
+@font-face { font-family: 'ChosunGulim'; src: url('../assets/fonts/ChosunGulim.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: 'Archivo Black'; src: url('../assets/fonts/ArchivoBlack.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: 'VCR OSD Mono'; src: url('../assets/fonts/VCROSDMono.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: 'Galmuri11'; src: url('../assets/fonts/Galmuri11-Bold.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: 'Dancing Script'; src: url('../assets/fonts/DancingScript.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
+@font-face { font-family: 'Script Casual'; src: url('../assets/fonts/ScriptCasual.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: 'Black Han Sans'; src: url('../assets/fonts/BlackHanSans.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: 'OtherHand'; src: url('../assets/fonts/OtherHand.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'OtherHand'; src: url('../assets/fonts/OtherHand-Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Gaegu'; src: url('../assets/fonts/Gaegu.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+
+/* ============ tokens ============ */
+:root {
+  --ink: #1B0033;
+  --navy: #0A1A6E;
+  --violet: #3A0CA3;
+  --hot: #FF2FB4;
+  --hot-deep: #C8007E;
+  --hot-soft: #FF7AD9;
+  --pink-wash: #FFE3F1;
+  --sky: #6FA8FF;
+  --sky-soft: #CFE3FF;
+  --link: #0033CC;
+  --link-hover: #FF0099;
+  --yellow: #FFE600;
+  --lime: #7CFF6B;
+  --cobalt: #1F3BD6;   /* 핑크 배경 위 큰 제목 채움색 */
+  --shock: #FF1493;    /* 남색·흰 배경 위 고유명사 */
+
+  /* 글꼴 역할 5개 (배콜사 '동네 변호사 광고' 공식) */
+  --font-display: "Archivo Black", "Black Han Sans", "Arial Black", sans-serif;     /* 제목·버튼: Arial Black 느낌 */
+  --font-accent: "VCR OSD Mono", "Galmuri11", monospace;                             /* 버튼·상태줄·전광판·태그: 비디오 화면 글자 (한글은 갈무리) */
+  --font-script: "Dancing Script", "Gaegu", cursive;                                 /* 필기체 기본: 고유명사·캡션·Click here! */
+  --font-script-bold: "Script Casual", "Gaegu", cursive;                             /* 굵게 밀어야 할 필기체: 큰 제목 속 고유명사·NEW POST 스티커 */
+  --font-ui: Arial, "Helvetica Neue", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; /* 작은 UI 글자 */
+  --font-read: "ChosunGulim", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;   /* 대화창·본문 */
+  --font-hand: "OtherHand", "Gaegu", cursive;                                        /* 메모·플레이스홀더 (한글은 개구체) */
+  --font-body: var(--font-ui);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--hot); }
+a { color: var(--link); }
+a:hover { color: var(--link-hover); }
+button { font: inherit; cursor: pointer; }
+input, textarea, select { font: inherit; }
+img { max-width: 100%; display: block; }
+
+.f-display { font-family: var(--font-display); font-weight: 400; }
+.f-accent { font-family: var(--font-accent); font-weight: 400; letter-spacing: .02em; text-transform: uppercase; }
+.f-script { font-family: var(--font-script); font-weight: 700; font-style: normal; }
+.f-script-bold { font-family: var(--font-script-bold); font-weight: 400; font-style: normal; }
+.f-ui { font-family: var(--font-ui); }
+.f-read { font-family: var(--font-read); }
+.f-hand { font-family: var(--font-hand); }
+
+/* ============ y2k components ============ */
+/* 배콜사 글자 공식: 대문자 + 채움색 + 흰 외곽선 + 진한 그림자.
+   채움색은 배경에 맞춰 --wa-fill로 바꿔요 (핑크 위 코발트 / 남색 위 노랑 / 보라 사진 위 노랑) */
+.wordart {
+  font-family: var(--font-display); font-weight: 400; font-style: normal; letter-spacing: .02em; text-transform: uppercase;
+  color: var(--wa-fill, var(--cobalt));
+  -webkit-text-stroke: 5px #FFFFFF; paint-order: stroke fill;
+  filter: drop-shadow(4px 4px 0 var(--ink));
+}
+
+/* 고유명사: "Better Call Saul!" 로고처럼 따옴표 + 굵은 스크립트 + 살짝 기울임. <Pn> 컴포넌트가 붙여요. */
+.pn {
+  display: inline-block; font-family: var(--font-script); font-weight: 700; font-style: normal;
+  text-transform: none; letter-spacing: 0; font-size: 1.25em; line-height: 1; padding: 0 .05em;
+  color: var(--pn-fill, var(--ink));
+  -webkit-text-stroke: var(--pn-stroke, .16em) #FFFFFF; paint-order: stroke fill;
+  filter: drop-shadow(.06em .07em 0 rgba(27, 0, 51, .55));
+  transform: rotate(-3deg) translateY(-.04em);
+}
+.pn::before { content: "\201C"; margin-right: .02em; }
+.pn::after { content: "\201D"; margin-left: .02em; }
+/* 큰 제목 안의 고유명사는 굵은 필기체(Script Casual)로 세게 */
+.wordart .pn { --pn-fill: var(--shock); --pn-stroke: .12em; font-family: var(--font-script-bold); font-weight: 400; font-size: 1.05em; }
+
+.btn-pill, .btn-aqua, .btn-gold {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-accent); font-weight: 400; font-style: normal; text-transform: uppercase;
+  min-height: 44px; text-decoration: none; transition: transform .12s ease, filter .12s ease;
+}
+.btn-pill {
+  border: 2px solid #9A0F5E; border-radius: 10px; color: #3A0024;
+  background: linear-gradient(180deg, #FFE3F1 0%, #FF9CCB 48%, #FF5FAE 52%, #FF8EC5 100%);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.85), 0 3px 0 #9A0F5E;
+}
+.btn-aqua {
+  border: 2px solid #0B3D91; border-radius: 999px; color: #FFFFFF; text-shadow: 0 1px 0 #0B3D91;
+  background: linear-gradient(180deg, #BFE6FF 0%, #4FA8FF 48%, #1167E8 52%, #5CC2FF 100%);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.9), 0 3px 0 #0B3D91;
+}
+.btn-gold {
+  border: 2px solid #7A4B00; border-radius: 999px; color: #3A2400;
+  background: linear-gradient(180deg, #FFF7C2 0%, #FFD43B 48%, #F5A800 52%, #FFE066 100%);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.9), 0 3px 0 #7A4B00;
+}
+.btn-pill:hover, .btn-aqua:hover, .btn-gold:hover { filter: brightness(1.08) saturate(1.2); transform: translateY(-2px); }
+.btn-pill:hover { color: #3A0024; }
+.btn-aqua:hover { color: #FFFFFF; }
+.btn-gold:hover { color: #3A2400; }
+.btn-pill:active, .btn-aqua:active, .btn-gold:active { transform: translateY(2px); }
+.btn-pill:focus-visible, .btn-aqua:focus-visible, .btn-gold:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+
+.glossy {
+  border: 2px solid rgba(0,0,0,.45); border-radius: 999px; color: #FFFFFF; min-height: 48px;
+  font-family: var(--font-accent); font-weight: 400; font-style: normal; text-transform: uppercase;
+  text-shadow: 1px 2px 0 rgba(0,0,0,.35);
+  box-shadow: inset 0 3px 0 rgba(255,255,255,.7), inset 0 -6px 10px rgba(0,0,0,.18), 0 4px 0 rgba(0,0,0,.35);
+  transition: transform .12s ease, filter .12s ease;
+}
+.glossy:hover { transform: scale(1.05) rotate(-1deg); filter: saturate(1.3); }
+.glossy--green { background: linear-gradient(180deg, #B8FF8A 0%, #3FCB2E 50%, #1E9E1B 52%, #57D84A 100%); }
+.glossy--yellow { background: linear-gradient(180deg, #FFF6A0 0%, #FFD21F 50%, #E8A900 52%, #FFE14D 100%); color: #5A3A00; text-shadow: 1px 1px 0 rgba(255,255,255,.6); }
+.glossy--red { background: linear-gradient(180deg, #FFB0A8 0%, #F0352A 50%, #C4140B 52%, #F2564C 100%); }
+.glossy--orange { background: linear-gradient(180deg, #FFD6A0 0%, #FF9A1F 50%, #E07400 52%, #FFB04D 100%); }
+
+.inset { border: 2px solid; border-color: #7F9DB9 #FFFFFF #FFFFFF #7F9DB9; background: #FFFFFF; }
+
+.status-bar {
+  background: linear-gradient(180deg, #FFF9A6, var(--yellow));
+  font-family: var(--font-accent); font-weight: 400;
+  padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.status-bar a { color: var(--ink); text-decoration: none; }
+.status-bar .online { text-transform: uppercase; font-size: 15px; }
+
+/* ============ motion ============ */
+@keyframes twinkle { 0%,100% { transform: scale(1) rotate(0); } 50% { transform: scale(1.25) rotate(18deg); } }
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.blink { animation: blink 1s steps(1) infinite; }
+.bob { animation: bob 3s ease-in-out infinite; }
+.pop { animation: pop .3s ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* 상단 상태바 집 아이콘 */
+.home-link { display: inline-flex; transition: transform .15s ease; }
+.home-link:hover { transform: translateY(-3px) rotate(-6deg) scale(1.08); }
+.home-link:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; border-radius: 6px; }
+.home-icon { filter: drop-shadow(2px 2px 0 rgba(27, 0, 51, .35)); }
+.home-sparkle { transform-box: fill-box; transform-origin: center; animation: twinkle 2.4s ease-in-out infinite; }

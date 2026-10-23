@@ -1,0 +1,24 @@
+---
+import Pn from './Pn.astro';
+interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+const loop = [...items, ...items];
+---
+
+<div class="marquee" aria-label={items.join(' · ')}>
+  <div class="track f-accent" aria-hidden="true">
+    {loop.map((t) => <span><Pn text={t} /></span>)}
+  </div>
+</div>
+
+<style>
+  .marquee {
+    overflow: hidden; background: var(--ink); color: #FFF27A;
+    border-block: 3px solid var(--yellow); padding: 8px 0;
+  }
+  .track { display: inline-flex; gap: 56px; white-space: nowrap; font-size: 22px; text-shadow: 2px 2px 0 #000; animation: marquee 24s linear infinite; }
+  .track :global(.pn) { --pn-fill: var(--shock); --pn-stroke: .1em; text-shadow: none; }
+  .marquee:hover .track { animation-play-state: paused; }
+</style>

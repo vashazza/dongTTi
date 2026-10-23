@@ -1,0 +1,30 @@
+[
+  {
+    "id": "essa",
+    "order": 1,
+    "role": "1st",
+    "title": "ESSA: Evolved Safety Specification Alignment",
+    "venue": "AI4Good Workshop @ ICML 2026",
+    "status": "published",
+    "note": "LLM 안전 정렬",
+    "link": "https://openreview.net/forum?id=Imcv0X7c36"
+  },
+  {
+    "id": "mri-findings",
+    "order": 2,
+    "role": "2nd",
+    "title": "Modality-Aware Patch Aggregation for Brain MRI Findings Generation",
+    "venue": "ICLR 2027",
+    "status": "under-review",
+    "note": "LLM-as-a-Judge 설계 · VLM 양자화/추론"
+  },
+  {
+    "id": "ivoct",
+    "order": 3,
+    "role": "3rd",
+    "title": "Patient-level multi-label IVOCT plaque classification with multi-vessel external validation",
+    "venue": "Computer Methods and Programs in Biomedicine",
+    "status": "under-review",
+    "note": "관상동맥 영상 분류"
+  }
+]

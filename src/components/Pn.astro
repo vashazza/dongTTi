@@ -1,0 +1,17 @@
+---
+// 고유명사를 "Better Call Saul!" 로고처럼 꾸며요. 두 가지로 써요:
+//   <Pn>dongTTi</Pn>                       → 감싼 글자를 통째로 꾸밈
+//   <Pn text="WHAT'S NEW AT DONGTTI.ZIP" /> → 문장 안에서 lib/pn.ts 목록에 있는 이름만 찾아 꾸밈
+// 큰 글씨(제목, 말풍선, 전광판)에만 쓰세요. 작은 글씨·본문에서는 스크립트가 읽기 힘들어요.
+import { splitProperNouns } from '@/lib/pn';
+
+interface Props {
+  text?: string;
+}
+const { text } = Astro.props;
+const segments = text !== undefined ? splitProperNouns(text) : null;
+---
+
+{segments
+  ? segments.map((s) => (s.pn ? <span class="pn">{s.text}</span> : s.text))
+  : <span class="pn"><slot /></span>}

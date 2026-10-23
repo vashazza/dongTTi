@@ -1,0 +1,27 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostBanner from '@/components/PostBanner.astro';
+import Pn from '@/components/Pn.astro';
+import CategoryFilter from '@/components/islands/CategoryFilter';
+import { getPosts } from '@/lib/posts';
+import { CATEGORY_LABEL } from '@/lib/site';
+
+const posts = await getPosts();
+const categories = Object.entries(CATEGORY_LABEL).map(([id, label]) => ({ id, label }));
+---
+
+<BaseLayout title="blog">
+  <div class="wrap">
+    <h1 class="wordart title"><Pn>dongTTi.zip</Pn></h1>
+    <CategoryFilter client:load target="all-posts" categories={categories} />
+    <div id="all-posts" class="list">
+      {posts.map((p) => <PostBanner post={p} />)}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 40px 16px 56px; display: flex; flex-direction: column; gap: 28px; }
+  .title { margin: 0; text-align: center; font-size: clamp(40px, 7vw, 72px); }
+  .list { display: flex; flex-direction: column; gap: 18px; }
+</style>

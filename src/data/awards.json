@@ -1,0 +1,5 @@
+[
+  { "id": "devocean", "prize": "최우수상", "name": "SKT DEVOCEAN AI 펠로우십" },
+  { "id": "ctech", "prize": "최우수상", "name": "KAIST×이화 C-tech Sprint" },
+  { "id": "eco", "prize": "우수상", "name": "기후에너지환경창업대전 (한국환경산업기술원장상)", "year": 2026 }
+]

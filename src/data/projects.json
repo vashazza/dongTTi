@@ -1,0 +1,43 @@
+[
+  {
+    "id": "essa",
+    "no": "01",
+    "tag": "LLM safety",
+    "name": "ESSA — Evolved Safety Specification Alignment",
+    "desc": "LLM 안전 정렬을 위한 안전 명세 진화 방법. 1저자로 AI4Good @ ICML 2026 워크숍 발표.",
+    "stack": ["LLM", "Alignment", "1st author"]
+  },
+  {
+    "id": "medgemmamr",
+    "no": "02",
+    "tag": "brain MRI",
+    "name": "MedGemmaMR · LLM-as-a-Judge",
+    "desc": "뇌 MRI 판독문 생성 모델의 LLM-as-a-Judge 평가 설계와 VLM 양자화·추론 최적화 담당.",
+    "stack": ["VLM", "Quantization", "LLM-as-judge"]
+  },
+  {
+    "id": "ivoct",
+    "no": "03",
+    "tag": "cardiac imaging",
+    "name": "IVOCT Plaque Classification",
+    "desc": "환자 단위 다중 라벨 관상동맥 플라크 분류와 다혈관 외부 검증.",
+    "stack": ["Medical imaging", "Multi-label"]
+  },
+  {
+    "id": "solar",
+    "no": "04",
+    "tag": "climate tech",
+    "name": "태양광 발전량 예측",
+    "desc": "C-tech Sprint 최우수상, 기후에너지환경창업대전 우수상으로 이어진 예측 아이템.",
+    "stack": ["Time series", "Forecasting"]
+  },
+  {
+    "id": "serving-bench",
+    "no": "05",
+    "tag": "coming soon",
+    "name": "24GB GPU 의료 VLM 서빙 벤치마크",
+    "desc": "양자화 방식별 처리량·지연·메모리 측정 + LLM-as-judge 품질 평가.",
+    "stack": ["vLLM", "SGLang", "AWQ/FP8"],
+    "upcoming": true
+  }
+]

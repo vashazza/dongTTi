@@ -1,0 +1,63 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import StatusBar from '@/components/islands/StatusBar';
+import { SITE, url } from '@/lib/site';
+import '@/styles/global.css';
+import '@/styles/glitter.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** 페이지 배경 테마 */
+  theme?: 'pink' | 'sky';
+  footerLine?: string;
+}
+
+const {
+  title,
+  description = SITE.description,
+  theme = 'pink',
+  footerLine = "guess she's busy training models, better luck next time",
+} = Astro.props;
+const pageTitle = title ? `${title} — ${SITE.title}` : SITE.title;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <link rel="alternate" type="application/rss+xml" title={SITE.title} href={url('/rss.xml')} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <ClientRouter />
+  </head>
+  <body class={`theme-${theme}`}>
+    <!-- 페이지를 넘겨도 유지되는 상단 상태바 (transition:persist) -->
+    <StatusBar client:load transition:persist="status-bar" />
+
+    <main transition:animate="fade">
+      <slot />
+    </main>
+
+    <footer class="status-bar site-footer">
+      <span>{footerLine}</span>
+      <span class="f-accent" style="font-size: 14px">best viewed in 1024×768 · © 2026 {SITE.title}</span>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  body.theme-pink {
+    background: radial-gradient(circle at 50% 18%, var(--hot-soft) 0%, var(--hot) 38%, var(--hot-deep) 100%) fixed;
+  }
+  body.theme-sky {
+    background: linear-gradient(180deg, #3E86F5 0%, #7DB4FF 30%, #CFE6FF 62%, #9ED8A8 78%, #5FB86A 100%) fixed;
+  }
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  main { flex: 1 0 auto; }
+  .site-footer { border-top: 3px solid var(--ink); font-size: 15px; }
+</style>

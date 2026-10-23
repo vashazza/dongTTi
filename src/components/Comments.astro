@@ -1,0 +1,47 @@
+---
+// giscus (GitHub Discussions 기반 댓글). 서버 없이 깃헙 페이지에서 동작해요.
+// 설정값은 https://giscus.app 에서 레포를 넣으면 생성돼요 → 아래 4개 값을 채우세요.
+const GISCUS = {
+  repo: 'vashazza/dongTTi',
+  repoId: '',
+  category: 'Comments',
+  categoryId: '',
+};
+const ready = GISCUS.repoId && GISCUS.categoryId;
+---
+
+<section class="comments">
+  <header class="f-display">comments <span class="f-accent">be nice plz</span></header>
+  <div class="inner">
+    {ready ? (
+      <script
+        is:inline
+        src="https://giscus.app/client.js"
+        data-repo={GISCUS.repo}
+        data-repo-id={GISCUS.repoId}
+        data-category={GISCUS.category}
+        data-category-id={GISCUS.categoryId}
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="light"
+        data-lang="ko"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async
+      ></script>
+    ) : (
+      <p class="f-hand">[ giscus 설정 전이에요 — src/components/Comments.astro 참고 ]</p>
+    )}
+  </div>
+</section>
+
+<style>
+  .comments { border: 2px solid #6C8FD8; border-radius: 10px; background: #FFFFFF; overflow: hidden; box-shadow: 5px 5px 0 rgba(58,12,163,.5); }
+  header { background: linear-gradient(180deg,#F4F8FF,#D3E2FF); padding: 8px 12px; font-size: 15px; font-weight: 700; color: #0A246A;
+    border-bottom: 1px solid #6C8FD8; display: flex; justify-content: space-between; }
+  header .f-accent { font-size: 14px; }
+  .inner { padding: 12px 14px; }
+  .inner p { margin: 0; font-size: 19px; color: #6B76B8; }
+</style>

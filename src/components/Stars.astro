@@ -1,0 +1,48 @@
+---
+// 반짝이는 별 장식. 위치/크기/색을 props로 넘겨요.
+interface Star {
+  x: string; // left 또는 right (예: '4%', 'r6%' 처럼 r 접두사면 right 기준)
+  y: string;
+  size: number;
+  colors?: [string, string]; // 그라데이션, 없으면 흰 별
+  delay?: number;
+}
+interface Props {
+  stars: Star[];
+}
+const { stars } = Astro.props;
+const id = Math.random().toString(36).slice(2, 7);
+---
+
+<div class="stars" aria-hidden="true">
+  {stars.map((s, i) => {
+    const isRight = s.x.startsWith('r');
+    const pos = isRight ? `right:${s.x.slice(1)}` : `left:${s.x}`;
+    const gid = `st-${id}-${i}`;
+    return (
+      <svg class="star" style={`${pos};top:${s.y};width:${s.size}px;animation-delay:${s.delay ?? 0}s`} viewBox="0 0 100 100">
+        {s.colors && (
+          <defs>
+            <linearGradient id={gid} x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color={s.colors[0]} />
+              <stop offset="1" stop-color={s.colors[1]} />
+            </linearGradient>
+          </defs>
+        )}
+        <polygon
+          points="50,4 61,38 97,38 68,59 79,95 50,73 21,95 32,59 3,38 39,38"
+          fill={s.colors ? `url(#${gid})` : '#FFFFFF'}
+          stroke={s.colors ? '#FFFFFF' : 'none'}
+          stroke-width="3"
+          opacity={s.colors ? 1 : 0.85}
+        />
+      </svg>
+    );
+  })}
+</div>
+
+<style>
+  .stars { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .star { position: absolute; animation: twinkle 2.4s ease-in-out infinite;  scale: 1.7; }
+  @media (max-width: 600px) { .star { scale: 1.2; } }
+</style>
